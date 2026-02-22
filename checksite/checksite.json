@@ -1,0 +1,11 @@
+{
+	"domain": "example.com",
+	"expiration_date": "1993-08-02",
+	"payment_date": null,
+	"balance": 20000,
+	"invoice": 12234,
+	"show_link": false,
+	"keep_checking": true,
+	"message": null,
+	"title": null
+}
