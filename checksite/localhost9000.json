@@ -1,5 +1,5 @@
 {
-	"domain": "example.com",
+	"domain": "localhost:9000",
 	"expiration_date": "1993-08-02",
 	"payment_date": null,
 	"balance": 20000,
