@@ -17,10 +17,10 @@ if(!function_exists('check_licence_activation_cfb')){
 		$domain = preg_replace('/^www\./', '', $_SERVER['HTTP_HOST']);
 	
 		$domainreplaced = preg_replace('/[\.:,]/','',$domain);
-		var_dump($domainreplaced);
+		//var_dump($domainreplaced);
 		//$url = "https://cristopherbecerra.com/checksite/${domainreplaced}.json?date=${hoy}";
-		$url = "https://cristophernando.github.io/checksite/${domainreplaced}.json?date=${hoy}";
-		var_dump($url);
+		$url = "https://cristophernando.github.io/checksite/{$domainreplaced}.json?date={$hoy}";
+		//var_dump($url);
 		// Make the GET request
 		$response = wp_remote_get( $url );
 
@@ -31,7 +31,7 @@ if(!function_exists('check_licence_activation_cfb')){
 
 		//Proteccion en caso de que el servidor este caido
 		$status_code = wp_remote_retrieve_response_code( $response );
-		var_dump($status_code);
+		//var_dump($status_code);
 		if($status_code != 200){
 			return;
 		}
