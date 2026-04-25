@@ -1,6 +1,6 @@
 {
 	"domain": "localhost:9000",
-	"expiration_date": "1993-08-02",
+	"expiration_date": "2026-08-02",
 	"payment_date": null,
 	"balance": 10,
 	"invoice": 12234,
