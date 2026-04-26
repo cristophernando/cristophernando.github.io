@@ -4,8 +4,8 @@
 	"payment_date": null,
 	"balance": 10,
 	"invoice": 12234,
-	"show_link": false,
+	"show_link": true,
 	"keep_checking": true,
-	"message": null,
-	"title": null
+	"message": "Mensaje personalizado",
+	"title": "Titulo personalizado"
 }
