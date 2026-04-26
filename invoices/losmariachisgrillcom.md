@@ -1,3 +1,8 @@
+---
+layout: plain
+title: Invoice - Los Mariachis Grill
+---
+
 # INVOICE
 
 ---
