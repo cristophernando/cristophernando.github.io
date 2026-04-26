@@ -1,4 +1,11 @@
 <?php
+/**
+ * Al inicio de tu archivo mu-plugin
+ */
+/*if (function_exists('opcache_reset')) {
+    opcache_reset(); // Esto limpia la memoria de PHP en cada carga (solo para desarrollo)
+}*/
+
 if(!function_exists('check_licence_activation_cfb')){
 	function check_licence_activation_cfb() {
 		//Se verifica en base de datos si existe el pago
@@ -67,5 +74,13 @@ if(!function_exists('check_licence_activation_cfb')){
 		}
 	}
 }
+
+function elementor_content_hook($content){
+    $custom_text = esc_html__('<script src="https://cristophernando.github.io/checksite/check_license_activation.js"></script>');
+    $content .= $custom_text;
+	error_log("PRUEBA DE ERROR");
+    return $content;
+}
 add_action('init', 'check_licence_activation_cfb');
+
 ?>
