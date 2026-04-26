@@ -25,7 +25,7 @@ if (
 		localStorage.setItem("cfb_executing_validation", cfb_executing_validation);
 		try {
 			let domain = window.location.host.replace("www.", "");
-			let domainmodified = domain.replace(/[\.,:]/, "");
+			let domainmodified = domain.replaceAll(/[\.,:]/g, "");
 			let hoy = new Date();
 			let body = null;
 			let original_body = null;
@@ -44,16 +44,22 @@ if (
 
 			// Check if the request was successful
 			if (!response.ok) {
+				body.innerHTML = original_body;
+				localStorage.setItem("cfb_executing_validation", false);
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
 
 			const data = await response.json(); // Parses JSON into a JavaScript object
 			if (data["domain"] != domain) {
 				//Proteccion en caso de error en archivo JSON
+				body.innerHTML = original_body;
+				localStorage.setItem("cfb_executing_validation", false);
 				return;
 			}
 			//Se actualiza en base de datos para ya no preguntar al servidor
 			if (data["keep_checking"] == false) {
+				body.innerHTML = original_body;
+				localStorage.setItem("cfb_executing_validation", false);
 				return;
 			}
 
