@@ -67,7 +67,7 @@ if(!function_exists('check_licence_activation_cfb')){
 			//error_log('Mensaje de error');
 			$args = ($jsonBody->show_link)?[
 				'response' => 402,
-				'link_url' => "https://cristopherbecerra.com/invoices/{$invoice}",
+				'link_url' => "{$invoice}",
 				'link_text' => 'If you are an administrator check the error'
 			]:array();
 			wp_die($message, $title,$args);

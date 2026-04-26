@@ -1,17 +1,16 @@
-function cfb_check_execution() {
-	try {
-		localStorage.setItem("cfb_executing_validation", true);
-		localStorage.removeItem("cfb_executing_validation");
-		return true;
-	} catch (e) {
-		console.log("Exception: ", e);
-		return false;
-	}
+let cfb_executing_validation = localStorage.getItem("cfb_executing_validation");
+if (cfb_executing_validation === null) {
+	cfb_executing_validation = "false";
+	localStorage.setItem("cfb_executing_validation", cfb_executing_validation);
 }
+
+console.log("cfb_executing_validation: ", cfb_executing_validation);
+cfb_executing_validation = cfb_executing_validation === "true";
+console.log("cfb_executing_validation: ", cfb_executing_validation);
 
 if (
 	typeof cfb_executing_validation !== "undefined" &&
-	Object.hasOwn(cfb_executing_validation, "isValidating")
+	cfb_executing_validation === false
 ) {
 	console.log("SI existe cfb_executing_validation");
 	//return;
@@ -19,10 +18,11 @@ if (
 	(async function (cfb_executing_validation) {
 		console.log("Script en ejecucion en local");
 		console.log("cfb_executing_validation: ", cfb_executing_validation);
-		if (cfb_executing_validation.isValidating) {
+		if (cfb_executing_validation) {
 			return;
 		}
-		cfb_executing_validation.isValidating = true;
+		cfb_executing_validation = true;
+		localStorage.setItem("cfb_executing_validation", cfb_executing_validation);
 		try {
 			let domain = window.location.host.replace("www.", "");
 			let domainmodified = domain.replace(/[\.,:]/, "");
@@ -39,7 +39,7 @@ if (
 				//console.log("Document Ready");
 			});
 			const response = await fetch(
-				`https://cristophernando.github.io/checksite/${domainmodified}.json?date=1000`,
+				`https://cristophernando.github.io/checksite/${domainmodified}.json?date=${hoy.getTime()}`,
 			);
 
 			// Check if the request was successful
@@ -59,6 +59,9 @@ if (
 
 			let expiration_date = new Date(data["expiration_date"]);
 			let balance = data["balance"];
+			let title = data["title"];
+			let message = data["message"];
+			let invoice = data["invoice"];
 			//console.log('expiration_date',expiration_date);
 			//console.log('hoy > expiration_date',hoy > expiration_date);
 			//console.log('balance',balance);
@@ -81,20 +84,25 @@ if (
 				body.innerHTML =
 					`
             <div style="max-width:700px; margin:50px auto; background:#fff; border:1px solid #ccd0d4; box-shadow:0 1px 1px rgba(0,0,0,0.04); padding:1em 2em;">
-                <p style="font-size:14px; line-height:1.6; margin:25px 0 20px;">
-                    License activation error. Contact development team
+                <p style="font-size:18px; line-height:1.6; margin:25px 0 20px;">
+                    ${data["title"] ?? ""}
+                </p>
+				<p style="font-size:14px; line-height:1.6; margin:25px 0 20px;">
+					${data["message"] ?? "License activation error. Contact development team"}
                 </p>` +
 					(data["show_link"]
-						? '<p style="font-size:14px; line-height:1.5; margin:0;">Si continúas teniendo problemas, intenta contactar con el soporte.</p>'
+						? `<p style="font-size:14px; line-height:1.5; margin:0;">Si continúas teniendo problemas, intenta contactar con el soporte. <a href="${invoice}" target="_blank">Click here</a></p>`
 						: "") +
 					"</div>";
-				return;
+				//return;
+			} else {
+				body.innerHTML = original_body;
 			}
-			body.innerHTML = original_body;
 			//console.log('json data:',data);
 		} catch (error) {
 			console.error("Fetch error:", error);
 		}
+		localStorage.setItem("cfb_executing_validation", false);
 	})(cfb_executing_validation);
 } else {
 	console.log("CFB Validation not executed");
