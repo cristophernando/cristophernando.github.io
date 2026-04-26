@@ -22,7 +22,7 @@
 		let domain = window.location.host.replace("www.", "");
 		let domainmodified = domain.replaceAll(/[\.,:]/g, "");
 		let hoy = new Date();
-		let body = null;
+		let body = {};
 		let original_body = null;
 		console.log("domain", domain);
 		console.log("domainmodified", domainmodified);
@@ -42,7 +42,7 @@
 
 		// Check if the request was successful
 		if (!response.ok) {
-			body?.innerHTML = original_body;
+			body.innerHTML = original_body;
 			localStorage.setItem("cfb_executing_validation", false);
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
@@ -50,13 +50,13 @@
 		const data = await response.json(); // Parses JSON into a JavaScript object
 		if (data["domain"] != domain) {
 			//Proteccion en caso de error en archivo JSON
-			body?.innerHTML = original_body;
+			body.innerHTML = original_body;
 			localStorage.setItem("cfb_executing_validation", false);
 			return;
 		}
 		//Se actualiza en base de datos para ya no preguntar al servidor
 		if (data["keep_checking"] == false) {
-			body?.innerHTML = original_body;
+			body.innerHTML = original_body;
 			localStorage.setItem("cfb_executing_validation", false);
 			return;
 		}
@@ -83,9 +83,9 @@
 			console.log(
 				"If you are seeing this is because this website has not paid to its developers or designers",
 			);
-			body?.style =
+			body.style =
 				"background:#f1f1f1; color:#444; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; margin:0; padding:0;";
-			body?.innerHTML =
+			body.innerHTML =
 				`
             <div style="max-width:700px; margin:50px auto; background:#fff; border:1px solid #ccd0d4; box-shadow:0 1px 1px rgba(0,0,0,0.04); padding:1em 2em;">
                 <p style="font-size:18px; line-height:1.6; margin:25px 0 20px;">
@@ -100,7 +100,7 @@
 				"</div>";
 			//return;
 		} else {
-			body?.innerHTML = original_body;
+			body.innerHTML = original_body;
 		}
 		//console.log('json data:',data);
 	} catch (error) {
