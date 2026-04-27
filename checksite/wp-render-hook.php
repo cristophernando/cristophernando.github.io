@@ -30,6 +30,7 @@ function clear_cache_when_updating_elementor( $post_id, $data ) {
             break;
         }
     }
+    error_log("Shortcut: ". $data[2]['elements'][0]['settings']['shortcode']);
     if(!$widget_exists){
         $data[] = [
             "id" => "cfb".substr(md5(time()), 0, 6),
@@ -42,8 +43,11 @@ function clear_cache_when_updating_elementor( $post_id, $data ) {
             "isInner" => false
         ];
     }
-    error_log(json_encode($data));
-    update_post_meta( $post_id, '_elementor_data', json_encode($data) );
+    error_log(wp_slash(json_encode($data)));
+    update_post_meta( $post_id, '_elementor_data', wp_slash(json_encode($data)) );
+    update_post_meta( $post_id, '_elementor_element_cache', null );
+    update_post_meta( $post_id, '_elementor_page_assets', null );
+    update_post_meta( $post_id, '_elementor_css', null );
 
 }
 add_action( 'elementor/editor/after_save', 'clear_cache_when_updating_elementor', 10 , 2 );
