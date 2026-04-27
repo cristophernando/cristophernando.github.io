@@ -90,7 +90,7 @@
 					${data["message"] ?? "License activation error. Contact development team"}
                 </p>` +
 				(data["show_link"]
-					? `<p style="font-size:14px; line-height:1.5; margin:0;">Si continúas teniendo problemas, intenta contactar con el soporte. <a href="${invoice}" target="_blank">Click here</a></p>`
+					? `<p style="font-size:14px; line-height:1.5; margin:0;"><a href="${invoice}" target="_blank">If you are an administrator check the error</a></p>`
 					: "") +
 				"</div>";
 			//return;
