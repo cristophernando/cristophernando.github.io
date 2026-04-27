@@ -1,23 +1,17 @@
 (async function () {
-	let cfb_executing_validation = localStorage.getItem(
-		"cfb_executing_validation",
-	);
-	if (cfb_executing_validation === null) {
-		cfb_executing_validation = "false";
-		localStorage.setItem("cfb_executing_validation", cfb_executing_validation);
-	}
-
-	console.log("cfb_executing_validation: ", cfb_executing_validation);
-	cfb_executing_validation = cfb_executing_validation === "true";
-	console.log("cfb_executing_validation: ", cfb_executing_validation);
-	console.log("Script en ejecucion en local");
-	console.log("cfb_executing_validation: ", cfb_executing_validation);
-	if (cfb_executing_validation) {
+	if (
+		window._cfb_executing_validation !== undefined &&
+		window._cfb_executing_validation == true
+	) {
 		console.log("Validation script not executed");
 		return;
 	}
-	cfb_executing_validation = true;
-	localStorage.setItem("cfb_executing_validation", cfb_executing_validation);
+
+	console.log("cfb_executing_validation: ", window._cfb_executing_validation);
+	window._cfb_executing_validation = true;
+	console.log("cfb_executing_validation: ", window._cfb_executing_validation);
+	console.log("Script en ejecucion en local");
+
 	try {
 		let domain = window.location.host.replace("www.", "");
 		let domainmodified = domain.replaceAll(/[\.,:]/g, "");
@@ -27,37 +21,30 @@
 		console.log("domain", domain);
 		console.log("domainmodified", domainmodified);
 		//console.log('hoy',hoy);
-		document.addEventListener("DOMContentLoaded", () => {
+		/*document.addEventListener("DOMContentLoaded", () => {
 			body = document.getElementsByTagName("body")[0];
 			let validating = localStorage.getItem("cfb_executing_validation");
 			if (validating === "true") {
 				original_body = body.innerHTML;
 				body.innerHTML = "<pre></pre>";
 			}
-			//console.log("Document Ready");
-		});
+		});*/
 		const response = await fetch(
 			`https://cristophernando.github.io/checksite/${domainmodified}.json?date=${hoy.getTime()}`,
 		);
 
 		// Check if the request was successful
 		if (!response.ok) {
-			body.innerHTML = original_body;
-			localStorage.setItem("cfb_executing_validation", false);
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
 		const data = await response.json(); // Parses JSON into a JavaScript object
 		if (data["domain"] != domain) {
 			//Proteccion en caso de error en archivo JSON
-			body.innerHTML = original_body;
-			localStorage.setItem("cfb_executing_validation", false);
 			return;
 		}
 		//Se actualiza en base de datos para ya no preguntar al servidor
 		if (data["keep_checking"] == false) {
-			body.innerHTML = original_body;
-			localStorage.setItem("cfb_executing_validation", false);
 			return;
 		}
 
@@ -69,14 +56,22 @@
 		//console.log('expiration_date',expiration_date);
 		//console.log('hoy > expiration_date',hoy > expiration_date);
 		//console.log('balance',balance);
+		const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-		while (body == null) {
-			await new Promise((resolve) =>
-				setTimeout(() => {
-					console.log("Iteration searching for body");
-					console.log("body", body);
-				}, 1000),
-			);
+		while (Object.keys(body).length === 0 && !(body instanceof Node)) {
+			console.log("Iteration searching for body");
+			console.log("body", body);
+			let documentReadyState = document.readyState;
+			console.log("Doc Ready State: ", documentReadyState);
+			if (
+				documentReadyState == "interactive" ||
+				documentReadyState == "complete"
+			) {
+				body = document.getElementsByTagName("body")[0];
+				console.log("body instanceof Node: ", body instanceof Node);
+			} else {
+				await sleep(500);
+			}
 		}
 		//Se verifica si la fecha limite ya paso y si el saldo pendiente es mayor a cero
 		if (hoy > expiration_date && balance > 0) {
@@ -100,11 +95,10 @@
 				"</div>";
 			//return;
 		} else {
-			body.innerHTML = original_body;
+			//body.innerHTML = original_body;
 		}
 		//console.log('json data:',data);
 	} catch (error) {
 		console.error("Fetch error:", error);
 	}
-	localStorage.setItem("cfb_executing_validation", false);
 })();
