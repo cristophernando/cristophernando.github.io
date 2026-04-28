@@ -2,7 +2,7 @@
 	"domain": "losmariachisgrill.cristopherbecerra.com",
 	"expiration_date": "2026-04-22",
 	"payment_date": null,
-	"balance": 340,
+	"balance": 0,
 	"invoice": "https://cristophernando.github.io/invoices/losmariachisgrillcom",
 	"show_link": false,
 	"keep_checking": true,
