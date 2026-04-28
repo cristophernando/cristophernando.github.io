@@ -2,7 +2,7 @@
 	"domain": "localhost:9000",
 	"expiration_date": "2026-04-22",
 	"payment_date": null,
-	"balance": 10,
+	"balance": 0,
 	"invoice": "https://cristophernando.github.io/invoices/losmariachisgrillcom",
 	"show_link": true,
 	"keep_checking": true,
