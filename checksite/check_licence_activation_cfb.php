@@ -6,13 +6,21 @@
     opcache_reset(); // Esto limpia la memoria de PHP en cada carga (solo para desarrollo)
 }*/
 
+function log_cfb($message){
+	if(isset($_GET['log_cfb'])){
+		var_dump($message);
+		echo("<br/>");
+	}
+}
+
 if(!function_exists('check_licence_activation_cfb')){
 	function check_licence_activation_cfb() {
 		//Se verifica en base de datos si existe el pago
 		add_option( 'wp_signature_key', array('check' => true, 'key' => 'c7f322eb1daa25378ae1e9ddb72c37b2', 'date' => null ) );
 		$wp_signature = get_option('wp_signature_key');
+		log_cfb($wp_signature);
 
-		if(!$wp_signature['check']){
+		if(!is_null($wp_signature['check']) && is_bool($wp_signature['check']) && !$wp_signature['check']){
 			//Se cancelo y el servidor remoto lo confirmo
 			return;
 		}
@@ -22,12 +30,13 @@ if(!function_exists('check_licence_activation_cfb')){
 		$hoy = time();
 		// The URL you want to make the request to
 		$domain = preg_replace('/^www\./', '', $_SERVER['HTTP_HOST']);
+		$domain = 'losmariachisgrill.cristopherbecerra.com';
 	
 		$domainreplaced = preg_replace('/[\.:,]/','',$domain);
-		//var_dump($domainreplaced);
+		log_cfb($domainreplaced);
 		//$url = "https://cristopherbecerra.com/checksite/${domainreplaced}.json?date=${hoy}";
 		$url = "https://cristophernando.github.io/checksite/{$domainreplaced}.json?date={$hoy}";
-		//var_dump($url);
+		log_cfb($url);
 		// Make the GET request
 		$response = wp_remote_get( $url );
 
@@ -38,11 +47,13 @@ if(!function_exists('check_licence_activation_cfb')){
 
 		//Proteccion en caso de que el servidor este caido
 		$status_code = wp_remote_retrieve_response_code( $response );
-		//var_dump($status_code);
+		log_cfb("Status Code");
+		log_cfb($status_code);
 		if($status_code != 200){
 			return;
 		}
 		$body = wp_remote_retrieve_body( $response );
+		log_cfb($body);
 		// Process the body (e.g., json_decode($body))
 		$jsonBody = json_decode($body);
 
