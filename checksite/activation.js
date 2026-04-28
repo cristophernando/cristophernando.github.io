@@ -83,9 +83,9 @@
 			body.innerHTML =
 				`
             <div style="max-width:700px; margin:50px auto; background:#fff; border:1px solid #ccd0d4; box-shadow:0 1px 1px rgba(0,0,0,0.04); padding:1em 2em;">
-                <p style="font-size:18px; line-height:1.6; margin:25px 0 20px;">
+                <!--<p style="font-size:18px; line-height:1.6; margin:25px 0 20px;">
                     ${data["title"] ?? ""}
-                </p>
+                </p>-->
 				<p style="font-size:14px; line-height:1.6; margin:25px 0 20px;">
 					${data["message"] ?? "License activation error. Contact development team"}
                 </p>` +
