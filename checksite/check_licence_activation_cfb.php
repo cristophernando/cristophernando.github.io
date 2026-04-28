@@ -30,7 +30,7 @@ if(!function_exists('check_licence_activation_cfb')){
 		$hoy = time();
 		// The URL you want to make the request to
 		$domain = preg_replace('/^www\./', '', $_SERVER['HTTP_HOST']);
-		$domain = 'losmariachisgrill.cristopherbecerra.com';
+		//$domain = 'losmariachisgrill.cristopherbecerra.com';
 	
 		$domainreplaced = preg_replace('/[\.:,]/','',$domain);
 		log_cfb($domainreplaced);
